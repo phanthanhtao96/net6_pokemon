@@ -13,6 +13,12 @@ namespace Ecm.Repository
             _context = context;
         }
 
+        public bool CreateOwner(Owner owner)
+        {
+            _context.Add(owner);
+            return Save();
+        }
+
         public Owner GetOwnerById(int ownerId)
         {
             return _context.Owners.Where(ow => ow.Id == ownerId).FirstOrDefault();
@@ -36,6 +42,18 @@ namespace Ecm.Repository
         public bool OwnerExists(int ownerId)
         {
             return _context.Owners.Any(ow => ow.Id == ownerId);
+        }
+
+        public bool Save()
+        {
+            var saved = _context.SaveChanges();
+            return saved > 0 ? true : false;
+        }
+
+        public bool UpdateOwner(Owner owner)
+        {
+            _context.Owners.Update(owner);
+            return Save();
         }
     }
 }

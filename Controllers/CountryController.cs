@@ -56,5 +56,40 @@ namespace Ecm.Controllers
 
             return Ok(country);
         }
+
+        [HttpPost]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        public IActionResult CreateCountry([FromBody] CountryDto countryBody)
+        {
+            if (countryBody == null) return BadRequest(ModelState);
+
+            return Ok();
+        }
+
+        [HttpPut("{countryId}")]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(404)]
+        public IActionResult UpdateCountry(int countryId, [FromBody] CountryDto countryBody) 
+        {
+            if (countryBody == null) return BadRequest(ModelState);
+            if (countryId != countryBody.Id) return BadRequest(ModelState);
+
+            if (!_countryRepository.CountryExists(countryId)) return NotFound();
+
+            if (!ModelState.IsValid) return BadRequest();
+
+            var countryMap = _mapper.Map<Country>(countryBody);
+
+            if (!_countryRepository.UpdateCountry(countryMap))
+            {
+                ModelState.AddModelError("", "Something went wrong updating category");
+                return StatusCode(500, ModelState);
+            }
+
+            return NoContent();
+        }
+
     }
 }
