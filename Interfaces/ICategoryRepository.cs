@@ -8,5 +8,8 @@ namespace Ecm.Interfaces
         Category GetCategoryById(int categoryId);
         ICollection<Pokemon> GetPokemonsByCategory(int categoryId);
         bool CategoryExists(int categoryId);
+        bool CreateCategory(Category category);
+        bool UpdateCategory(Category category);
+        bool Save();
     }
 }
